@@ -9,5 +9,6 @@
 2.系统分成用户使用，管理员使用两个版本<br>
 3.等等
 ## 截图部分
-![]
+![截图1](https://github.com/linjunhao1997/screenshot/blob/master/flowrdictionary/1.png)
+![截图2](https://github.com/linjunhao1997/screenshot/blob/master/flowrdictionary/2.png)
 
