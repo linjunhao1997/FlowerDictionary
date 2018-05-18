@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	form{
+	    
+		width:162px;
+		margin-left:auto;
+		margin-right:auto;
+	}
+	
+	
+	input[type="submit"]{
+		display:block;
+		margin:auto;
+	}
+</style>
+</head>
+<body>
+<!--行内元素是无法设置margin居中的 -->
+	<form action="/adminLoginSubmit" method="post">
+		<input type="text" name="adminname">
+		<input type="password" name="adminpw">
+		<input type="submit" value="登录">
+	</form>
+</body>
+
+	<script>
+		window.onload=function(){
+			form_margin_top = (window.innerHeight-200)/2;
+			
+			form = document.getElementsByTagName("form");
+			form[0].style.marginTop=form_margin_top+"px";
+		}
+		
+	</script>
+</html>

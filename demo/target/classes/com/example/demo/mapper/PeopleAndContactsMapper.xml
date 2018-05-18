@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.PeopleAndContactsMapper">
+	<resultMap type="People" id="PeopleResult">
+		<id column="peopleid" property="peopleid"/>
+		<result column="name" property="name"/>
+		<result column="phonenumber" property="phonenumber"/>
+	</resultMap>
+	
+	<resultMap type="Contacts" id="ContactsResult">
+		<id column="id" property="id"/>
+		<result column="contactsid" property="contactsid"/>
+		<collection property="peoples" column="contactsid" select="findPeopleByContacts"/>
+	</resultMap>
+	
+	<select id="findContactsById" parameterType="int" resultMap="ContactsResult">
+		select * from contacts
+			where contactsid = #{contactsid}
+	</select>
+	<select id="findPeopleByContacts" parameterType="int" resultMap="PeopleResult">
+		select * from people
+			where contactsid = #{contactsid} 
+	</select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.FlowerMapper">
+	<resultMap type="com.example.demo.bean.Flower" id="FlowerResult">
+		<id property="id" column="id"/>
+		<result property="flowername" column="flowername"/>
+		<result property="description" column="description"/>
+		<result property="pic" column="pic"/>
+	</resultMap>
+	
+	<insert id="addFlower">
+		insert into flower(flowername,description) 
+			values (#{flowername},#{description})
+	</insert>
+	
+	<delete id="deleteFlower">
+		delete from flower where flowername=#{flowername}
+	</delete>
+	
+	<update id="modifyFlower">
+		update flower set description=#{description}
+			where flowername=#{flowername}
+	</update>
+	
+	<select id="inquireFlower" resultMap="FlowerResult">
+		select * from flower where flowername=#{flowername}
+	</select>
+	
+	<update id="upLoadFlowerImg">
+		update flower set pic=#{pic}
+			where flowername=#{flowername}
+	</update>
+	
+</mapper>

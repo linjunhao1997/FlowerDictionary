@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>花卉字典</title>
+<style>
+	h1{
+		width:200px;
+		margin-left:auto;
+		margin-right:auto;
+	}
+	#adminhere{
+		margin-left:30%;
+	}
+	div{
+		width:500px;
+		margin-left:auto;
+		margin-right:auto;
+	}
+	
+	
+</style>
+</head>
+<body>
+	<h1>花卉字典</h1>
+	<span id="adminhere">管理员：</span><span th:text="${session.admin.adminname}"></span>
+	<div>
+		<input id="flowername" name="flowername" type="text" placeholder="花种">
+		
+	    <input id="file" type="file" name="file" />
+	    <input type="button" value="图片上传" onClick="upLoadFlowerImg()" />
+		
+		<input value="添加花种" type="button" onClick="addFlower()">
+		<input value="删除花种" type="button" onClick="deleteFlower()">
+		<input value="修改花种" type="button" onClick="modifyFlower()">
+		<input value="查询花种" type="button" onClick="inquireFlower()"><br/>
+		<textarea id="description" rows="5" cols="70" placeholder="花种描述"></textarea>
+		
+		<p></p>
+		<p></p>
+		<img id="img" alt="" src="">
+	</div>
+	<script>
+		//创建异步请求
+		function createXHR(){
+			if (typeof XMLHttpRequest != "undefined"){
+				return new XMLHttpRequest();
+			} else if (typeof ActiveXObject != "undefined"){
+				if (typeof arguments.callee.activeXString != "string"){
+				var versions = [ "MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0",
+						"MSXML2.XMLHttp"],
+				i, len;
+				for (i=0,len=versions.length; i < len; i++){
+					try {
+						new ActiveXObject(versions[i]);
+						arguments.callee.activeXString = versions[i];
+						break;
+					} catch (ex){
+						//跳过
+					}
+				}
+			}
+				return new ActiveXObject(arguments.callee.activeXString);
+			} else {
+				throw new Error("No XHR object available.");
+			}
+		}
+		
+		//添加	
+		function addFlower(){
+			var flowername = document.getElementById("flowername");
+			var description = document.getElementById("description");
+			flowername_value = flowername.value;
+			description_value = description.value;
+			var xhr = createXHR();
+			xhr.open("post" ,"/addFlower" ,false);
+			xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+			xhr.send("flowername="+flowername_value+"&description="+description_value);
+			if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+				alert(xhr.responseText)
+			}else
+			alert("Request was unsuccessful: "+ xhr.status);
+		}
+		
+		//删除
+		function deleteFlower(){
+			var flowername = document.getElementById("flowername");
+			flowername_value = flowername.value;
+			var xhr = createXHR();
+			xhr.open("post","/deleteFlower",false);
+			xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+			xhr.send("flowername="+flowername_value);
+			
+			if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+				alert(xhr.responseText);
+			}else
+			alert("Request was unsuccessful: "+ xhr.status);
+			
+		}
+		//修改
+		function modifyFlower(){
+			var flowername = document.getElementById("flowername");
+			var description = document.getElementById("description");
+			flowername_value = flowername.value;
+			description_value = description.value;
+			var xhr = createXHR();
+			xhr.open("post","/modifyFlower",false);
+			xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+			xhr.send("flowername="+flowername_value+"&description="+description_value);
+			
+			if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+				alert(xhr.responseText)
+			}else
+			alert("Request was unsuccessful: "+ xhr.status);
+			
+		}
+		
+		//查询
+		function inquireFlower(){
+			var flowername = document.getElementById("flowername");
+			var img = document.getElementById("img");
+			flowername_value = flowername.value;
+			var xhr = createXHR();
+			xhr.open("post","/inquireFlower",false);
+			xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+			xhr.send("flowername="+flowername_value);
+			
+			if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+				
+				if(xhr.responseText.length>0){
+					var flower = JSON.parse(xhr.responseText);
+					p = document.getElementsByTagName("p");
+					
+					p[0].innerHTML = flower.flowername;
+					p[1].innerHTML = flower.description;
+					img.src="../img/"+flower.pic;
+				}else{
+					alert("找不到花名");
+					p[0].innerHTML = null;
+					p[1].innerHTML = null;
+					img.src="#";
+				}
+			}else
+			alert("Request was unsuccessful: "+ xhr.status);
+			
+		}
+		
+		//上传图片
+		function upLoadFlowerImg(){
+			var flowername = document.getElementById("flowername");
+			 var file = document.getElementById("file").files[0];
+			flowername_value = flowername.value;
+			var data = new FormData();
+			data.append("flowername",flowername_value);
+			data.append("file",file);
+			var xhr = createXHR();
+			xhr.open("post","/upLoadImg",false);
+			
+			xhr.send(data);
+			alert();
+			if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+ 					alert(xhr.responseText);
+			}else
+			alert("Request was unsuccessful: "+ xhr.status);
+			
+		}
+	</script>
+</body>
+</html>
